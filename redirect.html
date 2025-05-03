@@ -1,0 +1,40 @@
+ <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Redirecting...</title>
+        <script>
+            function checkRedirect() {
+                const id = window.location.hash.substr(1);
+                const data = JSON.parse(localStorage.getItem(id));
+                
+                if(data) {
+                    document.getElementById('redirectSection').classList.remove('d-none');
+                    document.getElementById('adFrame').src = data.adLink;
+                    
+                    let timeLeft = 60;
+                    const timer = document.getElementById('timer');
+                    
+                    const countdown = setInterval(() => {
+                        timeLeft--;
+                        timer.textContent = `${String(timeLeft).padStart(2, '0')}:00`;
+                        
+                        if(timeLeft <= 0) {
+                            clearInterval(countdown);
+                            window.location.href = data.targetLink;
+                        }
+                    }, 1000);
+                }
+            }
+            window.onload = checkRedirect;
+        </script>
+    </head>
+    <body>
+        <div id="redirectSection" class="text-center d-none">
+            <div class="timer mb-3" id="timer">01:00</div>
+            <div class="progress mb-3">
+                <div class="progress-bar bg-danger" style="width: 100%"></div>
+            </div>
+            <iframe id="adFrame" class="w-100" style="height: 300px; border: none;"></iframe>
+        </div>
+    </body>
+    </html>
